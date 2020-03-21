@@ -57,18 +57,30 @@ const unsigned char ITESO [] = {
 		0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 };
 
-
+/** \brief This is the configuration structure to configure the LCD.
+ * Note that is constants and it is because is only a variable used for configuration*/
+const spi_config_t g_spi_config = {
+		SPI_DISABLE_FIFO,
+		SPI_LOW_POLARITY,
+		SPI_LOW_PHASE,
+		SPI_MSB,
+		SPI_0,
+		SPI_MASTER,
+		GPIO_MUX2|GPIO_DSE,
+		SPI_BAUD_RATE_8,
+		SPI_FSIZE_8,
+		{GPIO_D, bit_0, bit_1, bit_2, bit_3} };
 
 
 void display_init()
 {
-	//FlexTimer_Init();
-	//SPI_init();
-	//LCD_nokia_init();
-	///LCD_nokia_clear();
+	FlexTimer_Init();
+	SPI_init(&g_spi_config);
+	LCD_nokia_init();
+	LCD_nokia_clear();
 	//KEYBOARD_init();
-	//Push_Buttons_init();
-	//RGB_PWM_init()
+	Push_Buttons_init();
+	RGB_PWM_init();
 	//ADC_init();
 
 	/**Initialize interruptions*/
