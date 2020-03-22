@@ -69,7 +69,7 @@ const spi_config_t g_spi_config = {
 		GPIO_MUX2|GPIO_DSE,
 		SPI_BAUD_RATE_8,
 		SPI_FSIZE_8,
-		{GPIO_D, bit_0, bit_1, bit_2, bit_3} };
+		{GPIO_D, bit_5, bit_1, bit_2, bit_4} };
 
 
 void display_init()
@@ -83,22 +83,19 @@ void display_init()
 	RGB_PWM_init();
 	//ADC_init();
 
-	/**Initialize interruptions*/
-	GPIO_callback_init(GPIO_A, sw3_pressed);
-	GPIO_callback_init(GPIO_C, sw2_pressed);
-
 
 }
 
+
 Display_mode_t Display_main_menu()
 {
-	/** Define menu options*/
+
 	uint8_t string_manual[]="1) RGB Manual";
 	uint8_t string_adc[]="2) RGB ADC";
 	uint8_t string_secuencia[]="3) RGB Secuencia";
 
 
-	LCD_nokia_clear();
+/*	LCD_nokia_clear();
 	LCD_nokia_goto_xy(0,0);
 	LCD_nokia_send_string(string_manual);
 	delay(1000);
@@ -110,14 +107,14 @@ Display_mode_t Display_main_menu()
 	LCD_nokia_goto_xy(0,2);
 	LCD_nokia_send_string(string_secuencia);
 	delay(1000);
-
+*/
 
 	for(;;)
 	{
-		if(TRUE == PB_flag)
+		if(TRUE == Buttons_get_read_button_flag())
 		{
-			pressed_Button = Push_Buttons_read();
-			PB_flag = FALSE;
+			pressed_Button = get_key();
+			delay(20);
 		}
 		switch(pressed_Button)
 		{
@@ -148,16 +145,16 @@ void Display_sequence()
 	RGB_t Sequence[SEQUENCE_LIMIT];
 	Sequence[0] = off;
 
-	LCD_nokia_clear();
+	//LCD_nokia_clear();
 
 
 	while(PB_0 != pressed_Button)
 	{
-		pressed_Button = Push_Buttons_read();
+		pressed_Button = get_key();
 
 		if(SW2 == pressed_Button)
 		{
-			LCD_nokia_clear();
+			//	LCD_nokia_clear();
 			sequence_counter = 0;
 			flow_counter = 0;
 			for(uint16_t i = 0; i<SEQUENCE_LIMIT; i++)
@@ -171,13 +168,12 @@ void Display_sequence()
 		}
 
 		pressed_Button = NO_PB;
-
-		if(TRUE == PB_flag)
+		if(TRUE == Buttons_get_read_button_flag())
 		{
-			pressed_Button = Push_Buttons_read();
+			pressed_Button = get_key();
 			delay(20);
-			PB_flag = FALSE;
 		}
+
 
 		if(TRUE == sequence_flag)
 		{
@@ -198,37 +194,37 @@ void Display_sequence()
 				case PB_1:
 					sequence_counter ++;
 					Sequence[sequence_counter] = blue;
-					LCD_nokia_send_string("Z,");
+					//	LCD_nokia_send_string("Z,");
 					break;
 
 				case PB_2:
 					sequence_counter ++;
 					Sequence[sequence_counter] = red;
-					LCD_nokia_send_string("R,");
+					//	LCD_nokia_send_string("R,");
 					break;
 
 				case PB_3:
 					sequence_counter ++;
 					Sequence[sequence_counter] = green;
-					LCD_nokia_send_string("V,");
+					//	LCD_nokia_send_string("V,");
 					break;
 
 				case PB_4:
 					sequence_counter ++;
 					Sequence[sequence_counter] = yellow;
-					LCD_nokia_send_string("A,");
+					//	LCD_nokia_send_string("A,");
 					break;
 
 				case PB_5:
 					sequence_counter ++;
 					Sequence[sequence_counter] = purple;
-					LCD_nokia_send_string("M,");
+					//	LCD_nokia_send_string("M,");
 					break;
 
 				case PB_6:
 					sequence_counter ++;
 					Sequence[sequence_counter] = white;
-					LCD_nokia_send_string("B,");
+					//	LCD_nokia_send_string("B,");
 					break;
 
 				default:
@@ -248,37 +244,41 @@ void Display_manual()
 	int16_t red_value = PW_0;
 	int16_t green_value = PW_0;
 	int16_t blue_value = PW_0;
+	FlexTimer_update_channel_value(Channel_RED, PW_0);
+	FlexTimer_update_channel_value(Channel_GREEN, PW_0);
+	FlexTimer_update_channel_value(Channel_BLUE, PW_0);
+
 	uint8_t manual_flag = FALSE;
 
-	LCD_nokia_clear();
+	/*	LCD_nokia_clear();
 	LCD_nokia_goto_xy(0,0);
-	LCD_nokia_send_string("RGB Manual");
+	LCD_nokia_send_string("RGB Manual");*/
 
 
 	while(PB_0 != pressed_Button)
 	{
+		pressed_Button = get_key();
 		if(SW2 == pressed_Button)
 		{
-			LCD_nokia_clear();
+			/*LCD_nokia_clear();
 			LCD_nokia_goto_xy(0,0);
-			LCD_nokia_send_string("Salir modo Manual");
+			LCD_nokia_send_string("Salir modo Manual");*/
 			manual_flag = FALSE;
 
 		}
 
 		if(SW3 == pressed_Button)
 		{
-			LCD_nokia_clear();
+			/*	LCD_nokia_clear();
 			LCD_nokia_goto_xy(0,0);
-			LCD_nokia_send_string("Entrar modo Manual");
+			LCD_nokia_send_string("Entrar modo Manual");*/
 			manual_flag = TRUE;
 		}
 
 		pressed_Button = NO_PB;
-		if(TRUE == PB_flag)
+		if(TRUE == Buttons_get_read_button_flag())
 		{
-			pressed_Button = Push_Buttons_read();
-			PB_flag = FALSE;
+			pressed_Button = get_key();
 			delay(20);
 		}
 
@@ -354,6 +354,7 @@ void Display_manual()
 	FlexTimer_update_channel_value(Channel_BLUE, PW_0);
 
 }
+/*
 
 void Display_ADC()
 {
@@ -367,7 +368,7 @@ void Display_ADC()
 
 	while(PB_0 != pressed_Button)
 	{
-		pressed_Button = Push_Buttons_read();
+		pressed_Button = get_key()();
 		if(SW2 == pressed_Button)
 		{
 			LCD_nokia_clear();
@@ -385,14 +386,13 @@ void Display_ADC()
 			ADC_flag = TRUE;
 		}
 
-		pressed_Button = NO_PB;
-
-		if(TRUE == PB_flag)
+	pressed_Button = NO_PB;
+		if(TRUE == Buttons_get_read_button_flag())
 		{
-			pressed_Button = Push_Buttons_read();
-			delay(100);
-			PB_flag = FALSE;
+			pressed_Button = get_key();
+			delay(20);
 		}
+
 		if(TRUE == ADC_flag)
 		{
 			ADC_value = ADC_read(ADC_0);
@@ -472,15 +472,6 @@ void Display_imagen()
 	delay(100);
 }
 
-void sw2_pressed()
-{
 
-}
-
-
-void sw3_pressed()
-{
-
-	pressed_Button = SW3;
-}
+ */
 
