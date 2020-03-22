@@ -46,5 +46,4 @@ Display_mode_t Display_main_menu();
 void Display_sequence();
 void Display_manual();
 void Display_ADC();
-
 #endif /* DISPLAY_H_ */
