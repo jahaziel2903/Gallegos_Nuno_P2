@@ -1,5 +1,4 @@
 
-
 #include "Push_Buttons.h"
 #include "Delay.h"
 #include "stdint.h"
@@ -14,6 +13,7 @@ static Buttons_t current_button = NO_PB;
 
 button_flag_t g_button_flag = {FALSE};
 
+/*This function initalizes all PB and switches**/
 void Push_Buttons_init()
 {
 	GPIO_clock_gating(GPIO_A);
@@ -75,7 +75,7 @@ void Push_Buttons_init()
 }
 
 
-
+/*This function reads PB from portA**/
 void Push_Buttons_readA()
 {
 	uint32_t input_value;
@@ -85,6 +85,7 @@ void Push_Buttons_readA()
 	g_button_flag.read_button_flag = TRUE;
 }
 
+/*This function reads PB from portB**/
 void Push_Buttons_readB()
 {
 	delay(100);
@@ -93,6 +94,7 @@ void Push_Buttons_readB()
 	g_button_flag.read_button_flag = TRUE;
 }
 
+/*This function reads PB from portC**/
 void Push_Buttons_readC()
 {
 	uint32_t input_value;
@@ -129,6 +131,7 @@ void Push_Buttons_readC()
 	g_button_flag.read_button_flag = TRUE;
 }
 
+/*This function reads PB from portD**/
 void Push_Buttons_readD()
 {
 	uint32_t input_value;
@@ -153,6 +156,7 @@ void Push_Buttons_readD()
 
 }
 
+/*This function returns flag PB read, in order to have a better control**/
 uint8_t Buttons_get_read_button_flag(void)
 {
 	/**Variable to capture the flag value*/
@@ -162,6 +166,7 @@ uint8_t Buttons_get_read_button_flag(void)
 	return flag_value;
 }
 
+/*This function returns PB read**/
 Buttons_t get_key()
 {
 	Buttons_t temp = current_button ;
@@ -170,4 +175,3 @@ Buttons_t get_key()
 	return temp;
 
 }
-
