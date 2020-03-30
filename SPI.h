@@ -1,5 +1,6 @@
+
 /*
- * SPI.h
+ * PWMrgb.c
  *
  *  Created on: 19 mar. 2020
  *      Author: usuario
@@ -7,7 +8,6 @@
 
 #ifndef SPI_H_
 #define SPI_H_
-
 #include <MK64F12.h>
 #include "stdint.h"
 #include "GPIO.h"
@@ -26,7 +26,7 @@
 #define SPI_FSIZE_8 SPI_CTAR_FMSZ(7)
 #define SPI_FSIZE_9 SPI_CTAR_FMSZ(8)
 #define SPI_FSIZE_10 SPI_CTAR_FMSZ(9)
-#define SPI_FSIZE_11 SPI_CTAR_FMSZ(10)
+#define SPI_FSIZE_11 SPI_CTAR_FMSZ(10) 
 #define SPI_FSIZE_12 SPI_CTAR_FMSZ(11)
 #define SPI_FSIZE_13 SPI_CTAR_FMSZ(12)
 #define SPI_FSIZE_14 SPI_CTAR_FMSZ(13)
@@ -74,10 +74,10 @@ typedef enum {SPI_LOW_PHASE, SPI_HIGH_PHASE} spi_phase_t;
 typedef enum {SPI_MSB, SPI_LSB} spi_lsb_or_msb_t;
 /*Type for SPI modules*/
 typedef enum {SPI_0,
-			  SPI_1,
-			  SPI_2
-			  } spi_channel_t;
-/*Type for master or slave configuration*/
+	SPI_1,
+	SPI_2
+} spi_channel_t;
+/*Type for master or slave configuration*/			  
 typedef enum{SPI_SLAVE, SPI_MASTER} spi_master_t;
 /*Type for GPIO configuration that activates the GPIO for SPI*/
 typedef struct{
@@ -105,35 +105,115 @@ typedef struct
 
 
 
- void SPI_enable(spi_channel_t channel);
+/********************************************************************************************/
+/*!
+ 	 \brief	enable the clock module of the SPI by modifying the MDIS bits
+ 	 \param[in] receives channel spi
+ 	 \return void
+ */
+void SPI_enable(spi_channel_t channel);
+/********************************************************************************************/
+/*!
+  	 \briefActivats clock gating
+ 	 \param[in] receives spi channels
+ 	 \return void
+ */
 
- void SPI_clk(spi_channel_t channel);
-
- void SPI_set_master(spi_channel_t channel, spi_master_t master_or_slave);
-
- void SPI_fifo(spi_channel_t channel, spi_enable_fifo_t enable_or_disable);
-
- void SPI_clock_polarity(spi_channel_t channel, spi_polarity_t cpol);
-
- void SPI_frame_size(spi_channel_t channel, uint32_t frame_size);
-
- void SPI_clock_phase(spi_channel_t channel, spi_phase_t cpha);
-
- void SPI_baud_rate(spi_channel_t channel, uint32_t baud_rate);
-
- void SPI_msb_first(spi_channel_t channel, spi_lsb_or_msb_t msb);
-
+void SPI_clk(spi_channel_t channel);
+/********************************************************************************************/
+/*!
+  	 \brief	It configure the SPI as a master or slave
+ 	 \param[in] receives spi channel and spi master or slave
+ 	 \return void
+ */
+void SPI_set_master(spi_channel_t channel, spi_master_t master_or_slave);
+/********************************************************************************************/
+/*!
+  	 \brief	activate the TX and RX FIFOs of the SPI
+ 	 \param[in] receives spi cahnnel and enable fifo or disable
+ 	 \return void
+ */
+void SPI_fifo(spi_channel_t channel, spi_enable_fifo_t enable_or_disable);
+/********************************************************************************************/
+/*!
+  	 \brief It selects the clock polarity
+  	 \param[in] receives  value of cpol
+  	 \return void
+ */
+void SPI_clock_polarity(spi_channel_t channel, spi_polarity_t cpol);
+/********************************************************************************************/
+/*!
+  	 \brief	It  selects the frame size
+  	 \param[in]receives spi channel and frame size
+  	 \return void
+ */
+void SPI_frame_size(spi_channel_t channel, uint32_t frame_size);
+/********************************************************************************************/
+/*!
+  	 \brief	selects the clock phase
+  	 \param[in] receives spi channel and spi phase
+  	 \return void
+ */
+void SPI_clock_phase(spi_channel_t channel, spi_phase_t cpha);
+/********************************************************************************************/
+/*!
+  	 \brief	It selects the baud rate
+  	 \param[in] receives spi channel and baud rate
+  	 \return void
+ */
+void SPI_baud_rate(spi_channel_t channel, uint32_t baud_rate);
+/********************************************************************************************/
+/*!
+  	 \brief	selects if MSB or LSM bits
+  	 \param[in] receives spi channel and msb
+  	 \return uint8_t flag status
+ */
+/*It selects if MSB or LSM bits is first transmitted*/
+void SPI_msb_first(spi_channel_t channel, spi_lsb_or_msb_t msb);
+/********************************************************************************************/
+/*!
+  	 \brief	It configures the SPI for transmission
+  	 \param[in] eceives a pointer to a constant structure with all configuration paramters
+  	 \return void
+ */
+/*It stars the SPI transmission by modifying the value of HALT bit*/
 void SPI_start_tranference(spi_channel_t channel);
-
+/********************************************************************************************/
+/*!
+ 	 \brief	It stops the SPI transmission
+ 	 \param[in] receives spi channel
+ 	 \return void
+ */
 void SPI_stop_tranference(spi_channel_t channel);
-
+/********************************************************************************************/
+/*!
+ 	 \brief	transmits the information
+ 	 \param[in] receives spi channel and data to be transmitted
+ 	 \return void
+ */
 uint8_t SPI_tranference(spi_channel_t channel, uint8_t data);
+/********************************************************************************************/
+/*!
+ 	 \brief	It configures the SPI
+ 	 \param[in] eceives a pointer to a constant structure with all configuration paramters
+ 	 \return void
+ */
 
 void SPI_init(const spi_config_t* config_struct);
 
+/********************************************************************************************/
+/*!
+ 	 \brief	Function that reads a map
+ 	 \param[in]  receives an address
+ 	 \return void
+ */
 void SPI_read_bitmap(uint16_t address);
-
+/********************************************************************************************/
+/*!
+ 	 \brief	It reads spi byte
+ 	 \param[in]  pit_timer channel to be used.
+ 	 \return void
+ */
 uint8_t SPI_read_byte(spi_channel_t channel);
 
 #endif /* SPI_H_ */
-
