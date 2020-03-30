@@ -11,10 +11,11 @@
 #include "flextimer.h"
 #include "Bits.h"
 
+
+/*This function initializes PWM**/
 void RGB_PWM_init()
 {
 	gpio_pin_control_register_t FTM0_out_ports = GPIO_MUX4;
-//	gpio_pin_control_register_t FTM3_out_ports = GPIO_MUX3;
 	GPIO_pin_control_register(GPIO_C, bit_1, &FTM0_out_ports);
 	GPIO_pin_control_register(GPIO_C, bit_2, &FTM0_out_ports);
 	GPIO_pin_control_register(GPIO_C, bit_3, &FTM0_out_ports);
@@ -24,8 +25,12 @@ void RGB_PWM_init()
 	FlexTimer_assign_PWM(Channel_GREEN); // channel 1
 	FlexTimer_assign_PWM(Channel_BLUE); // channel 2
 
-}
+	FlexTimer_update_channel_value(Channel_RED, PW_0);
+	FlexTimer_update_channel_value(Channel_GREEN, PW_0);
+	FlexTimer_update_channel_value(Channel_BLUE, PW_0);
 
+}
+/*This function sets color into the led**/
 void RGB_set_color(RGB_t led_color)
 {
 	switch(led_color)
