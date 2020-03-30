@@ -27,10 +27,13 @@
 #define BLUE_PURPLE (0xCCu) //204
 #define PURPLE (0xFFu) //255
 
+/*Constant that represents sequence limit**/
+#define SEQUENCE_LIMIT (0xAu)
+
 //como son valores de 0 a 3.3, se hace un cast 0 - 255
 #define cast_255 (0x5u)
 
-/** Constant that represent different program states*/
+/** Constant that represent program menu*/
 typedef enum {
 		imagen,
 		main_menu,
@@ -39,11 +42,74 @@ typedef enum {
 		sequence
 } Display_mode_t;
 
-#define SEQUENCE_LIMIT (0xAu)
+/********************************************************************************************/
+/********************************************************************************************/
+/********************************************************************************************/
+/*!
+	 \brief	 This function shows wallpaper
+
+	 \param[in] does not receive parameter
+	 \return void
+ */
 void Display_imagen();
+/********************************************************************************************/
+/********************************************************************************************/
+/********************************************************************************************/
+/*!
+	 \brief	 This function initializes display
+
+	 \param[in] does not receive parameter
+	 \return void
+ */
 void display_init();
+/********************************************************************************************/
+/********************************************************************************************/
+/********************************************************************************************/
+/*!
+	 \brief	 This function returns main menu configuration according to PB pressed
+
+	 \param[in] does not receive parameter
+	 \return void
+ */
 Display_mode_t Display_main_menu();
+/********************************************************************************************/
+/********************************************************************************************/
+/********************************************************************************************/
+/*!
+	 \brief	 This function shows sequence configuration
+
+	 \param[in] does not receive parameter
+	 \return void
+ */
 void Display_sequence();
+/********************************************************************************************/
+/********************************************************************************************/
+/********************************************************************************************/
+/*!
+	 \brief	 This function shows manual configuration
+
+	 \param[in] does not receive parameter
+	 \return void
+ */
 void Display_manual();
+/********************************************************************************************/
+/********************************************************************************************/
+/********************************************************************************************/
+/*!
+	 \brief	 This function shows ADC configuration
+
+	 \param[in] does not receive parameter
+	 \return void
+ */
 void Display_ADC();
+/********************************************************************************************/
+/********************************************************************************************/
+/********************************************************************************************/
+/*!
+	 \brief	 This function shows the first rgb sequence
+
+	 \param[in] does not receive parameter
+	 \return void
+ */
+void initial_sequence(void);
 #endif /* DISPLAY_H_ */
