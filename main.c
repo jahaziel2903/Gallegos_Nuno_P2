@@ -79,7 +79,7 @@ int main(void){
 				Display_ADC();
 				actual_state = ADC_MODE_DIS;
 				break;
-			case PB_4:
+			case PB_3:
 				Display_sequence();
 				actual_state = SEQUENCE_MODE;
 				break;
