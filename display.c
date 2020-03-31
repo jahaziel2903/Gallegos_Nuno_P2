@@ -51,23 +51,13 @@ const spi_config_t g_spi_config = {
 /*This function initializes display**/
 void display_init()
 {
-	SPI_init(&g_spi_config); /*! Configuration function for the LCD port*/
-
-	LCD_nokia_init(); /*! Configuration function for the LCD */
-	LCD_nokia_clear();/*! It clears the information printed in the LCD*/
-
-	/*FlexTimer_Init();
 	SPI_init(&g_spi_config);
 	LCD_nokia_init();
 	LCD_nokia_clear();
-	//KEYBOARD_init();
-	Push_Buttons_init();
-	RGB_PWM_init();
-	ADC_init();*/
 }
 
 /* This function returns main menu configuration according to PB pressed**/
-Display_mode_t Display_main_menu()
+void Display_main_menu()
 {
 
 
@@ -78,7 +68,7 @@ Display_mode_t Display_main_menu()
 	LCD_nokia_clear();
 	LCD_nokia_goto_xy(0,1);
 
-	LCD_nokia_send_string(&string_1);
+	LCD_nokia_send_string(string_1);
 	LCD_nokia_goto_xy(0,2);
 	LCD_nokia_send_string(string_2);
 	LCD_nokia_goto_xy(0,3);
