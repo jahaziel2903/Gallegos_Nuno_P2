@@ -53,13 +53,15 @@ int main(void){
 	{
 		switch(actual_state)
 		{
+		/*Depending on state selects where to go**/
 		case WALL_PAPER:
 			Display_imagen();
-			Display_main_menu();
 			actual_state = MAIN_MENU;
 			break;
 		case MAIN_MENU:
 			pressed_Button = NO_PB;
+			/*Read which button was pressed**/
+			/*Depending on button is the mode we will enter**/
 			if(TRUE == Buttons_get_read_button_flag())
 			{
 				pressed_Button = get_key();
@@ -85,6 +87,7 @@ int main(void){
 				break;
 			}
 			break;
+			/*to activate mode enable, we need to press sw3**/
 			case MANUAL_MODE_DIS:
 				if(TRUE == Buttons_get_read_button_flag())
 				{
@@ -95,6 +98,7 @@ int main(void){
 					actual_state = MANUAL_MODE_EN;
 				}
 				break;
+				/*to deactivate and go back to main menu we need to press sw2**/
 			case MANUAL_MODE_EN:
 				if(TRUE == Buttons_get_read_button_flag())
 				{
@@ -111,6 +115,7 @@ int main(void){
 					}
 				}
 				break;
+				/*To enter ADC we need to press sw3**/
 			case ADC_MODE_DIS:
 				if(TRUE == Buttons_get_read_button_flag())
 				{
@@ -121,6 +126,7 @@ int main(void){
 					actual_state = ADC_MODE_EN;
 				}
 				break;
+				/*to deactivate ADC and go back to main menu we need to press sw2**/
 			case ADC_MODE_EN:
 				if(TRUE == ADC_get_conversion_flag(ADC_0, SC_A))
 				{
@@ -140,6 +146,8 @@ int main(void){
 					}
 				}
 				break;
+				/*To show sequence  we need to press sw3**/
+				/*Otherwise we will save and show color pressed**/
 			case SEQUENCE_MODE:
 				if(TRUE == Buttons_get_read_button_flag())
 				{
@@ -156,12 +164,14 @@ int main(void){
 					}
 				}
 				break;
+				/*Once sw3 was pressed every second will show a different color**/
 			case SEQUENCE_MODE_ACTIVE:
 				if(TRUE == PIT_get_interrupt_flag_status(PIT_0))
 				{
 					PIT_clear_interrupt_flag();
 					show_rgb_sequence();
 				}
+				/*Pressing sw2 will stop sequence and go back to main menu**/
 				if(TRUE == Buttons_get_read_button_flag())
 				{
 					pressed_Button = get_key();
@@ -175,6 +185,7 @@ int main(void){
 				}
 				break;
 			default:
+				/*Default case will go back to menu**/
 				actual_state = MAIN_MENU;
 				break;
 		}
