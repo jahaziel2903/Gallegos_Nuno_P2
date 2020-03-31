@@ -42,39 +42,39 @@ void RGB_set_color(RGB_t led_color)
 			break;
 
 		case red:
-			FlexTimer_update_channel_value(Channel_RED, PW_100);
+			FlexTimer_update_channel_value(Channel_RED, HIGH);
 			FlexTimer_update_channel_value(Channel_GREEN, PW_0);
 			FlexTimer_update_channel_value(Channel_BLUE, PW_0);
 			break;
 
 		case yellow:
-			FlexTimer_update_channel_value(Channel_RED, PW_100);
-			FlexTimer_update_channel_value(Channel_GREEN, PW_100);
+			FlexTimer_update_channel_value(Channel_RED, HIGH);
+			FlexTimer_update_channel_value(Channel_GREEN, HIGH);
 			FlexTimer_update_channel_value(Channel_BLUE, PW_0);
 			break;
 
 		case green:
 			FlexTimer_update_channel_value(Channel_RED, PW_0);
-			FlexTimer_update_channel_value(Channel_GREEN, PW_100);
+			FlexTimer_update_channel_value(Channel_GREEN, HIGH);
 			FlexTimer_update_channel_value(Channel_BLUE, PW_0);
 			break;
 
 		case blue:
 			FlexTimer_update_channel_value(Channel_RED, PW_0);
 			FlexTimer_update_channel_value(Channel_GREEN, PW_0);
-			FlexTimer_update_channel_value(Channel_BLUE, PW_100);
+			FlexTimer_update_channel_value(Channel_BLUE, HIGH);
 			break;
 
 		case purple:
-			FlexTimer_update_channel_value(Channel_RED, PW_100);
+			FlexTimer_update_channel_value(Channel_RED, HIGH);
 			FlexTimer_update_channel_value(Channel_GREEN, PW_0);
-			FlexTimer_update_channel_value(Channel_BLUE, PW_100);
+			FlexTimer_update_channel_value(Channel_BLUE, HIGH);
 			break;
 
 		case white:
-			FlexTimer_update_channel_value(Channel_RED, PW_100);
-			FlexTimer_update_channel_value(Channel_GREEN, PW_100);
-			FlexTimer_update_channel_value(Channel_BLUE, PW_100);
+			FlexTimer_update_channel_value(Channel_RED, HIGH);
+			FlexTimer_update_channel_value(Channel_GREEN, HIGH);
+			FlexTimer_update_channel_value(Channel_BLUE, HIGH);
 			break;
 
 		default:

@@ -14,9 +14,10 @@
 #include "Bits.h"
 
 /** Constant that represent the value of PWM */
-#define PW_100 (0xFFu)
-#define PW_0 (0x0u)
-#define PW_10 (0x19) //10% de PW_100
+#define PW_100 (10U)
+#define PW_0 (0x0)
+#define PW_10 (25U) //10% de PW_100
+#define HIGH 255U
 
 /** Constant that represent the colors used */
 typedef enum{
