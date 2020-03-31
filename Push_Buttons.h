@@ -8,6 +8,7 @@
 #include "MK64F12.h"
 #include "Bits.h"
 
+#define delay_debounce 50
 /*Mask from each port **/
 #define READ_BUTTONSA (0x10u)
 #define READ_BUTTONSB (0x800u)

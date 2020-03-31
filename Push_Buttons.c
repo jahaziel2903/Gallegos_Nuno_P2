@@ -9,6 +9,7 @@
 #include "LCD_nokia.h"
 #include "display.h"
 #include "flextimer.h"
+#include "NVIC.h"
 static Buttons_t current_button = NO_PB;
 
 button_flag_t g_button_flag = {FALSE};
@@ -79,18 +80,16 @@ void Push_Buttons_init()
 void Push_Buttons_readA()
 {
 	uint32_t input_value;
-	delay(100);
 	current_button = SW3;
-	delay(100);
+	delay(delay_debounce);
 	g_button_flag.read_button_flag = TRUE;
 }
 
 /*This function reads PB from portB**/
 void Push_Buttons_readB()
 {
-	delay(100);
 	current_button = PB_4;
-	delay(100);
+	delay(delay_debounce);
 	g_button_flag.read_button_flag = TRUE;
 }
 
@@ -98,36 +97,35 @@ void Push_Buttons_readB()
 void Push_Buttons_readC()
 {
 	uint32_t input_value;
-	delay(100);
 	input_value = GPIO_read_port(GPIO_C);
 	input_value = READ_BUTTONSC & input_value;
 
 	if(BUTTON_0 == input_value)
 	{
 		current_button = PB_0;
-		printf("pb1");
+	//	printf("pb1");
 	}
 	if(BUTTON_1 == input_value)
 	{
 		current_button = PB_1;
-		printf("pb1");
+	//	printf("pb1");
 	}
 	if(switch2 == input_value)
 	{
 		current_button = SW2;
-		printf("sw2");
+	//	printf("sw2");
 	}
 	if(BUTTON_6 == input_value)
 	{
 		current_button = PB_6;
-		printf("pb6");
+	//	printf("pb6");
 	}
 	if(BUTTON_5 == input_value)
 	{
 		current_button = PB_5;
-		printf("pb5");
+	//	printf("pb5");
 	}
-	delay(100);
+	delay(delay_debounce);
 	g_button_flag.read_button_flag = TRUE;
 }
 
@@ -143,15 +141,15 @@ void Push_Buttons_readD()
 	if(BUTTON_2 == input_value)
 	{
 		current_button = PB_2;
-		printf("pb2");
+	//	printf("pb2");
 	}
 
 	if(BUTTON_3 == input_value)
 	{
 		current_button = PB_3;
-			printf("pb3");
+	//	printf("pb3");
 	}
-	delay(100);
+	delay(delay_debounce);
 	g_button_flag.read_button_flag = TRUE;
 
 }
@@ -170,7 +168,7 @@ uint8_t Buttons_get_read_button_flag(void)
 Buttons_t get_key()
 {
 	Buttons_t temp = current_button ;
-	printf("%d", temp);
+//	printf("%d", temp);
 	current_button = NO_PB;
 	return temp;
 
