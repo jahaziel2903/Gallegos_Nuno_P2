@@ -116,6 +116,7 @@ void ADC_disable_conversion_irq(adc_name_t adc_name, adc_channel_set_t channel_s
 
 uint8_t ADC_get_conversion_flag(adc_name_t adc_name, adc_channel_set_t channel_set);
 uint16_t ADC_get_data(adc_name_t adc_name, adc_channel_set_t channel_set);
-
+void adc_init(void);
+uint8_t adc_read(void);
 
 #endif /* ADC_H_ */

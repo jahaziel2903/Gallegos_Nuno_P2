@@ -34,6 +34,25 @@ void ADC_clock_gating(adc_name_t adc_name)
 	}
 }
 
+void adc_init(void)
+{
+	// Enable clocks and Configure ADC
+	SIM->SCGC6 |= SIM_SCGC6_ADC0_MASK;	// ADC 0 clock
+	/**Mode select the channel mode and bits amoun*/
+	ADC0->CFG1  = ADC_CFG1_MODE(0)| ADC_CFG1_ADLSMP_MASK | ADC_CFG1_ADIV(1) | ADC_CFG1_ADICLK(0);
+	ADC0->SC3 = ADC_SC3_AVGE_MASK | ADC_SC3_AVGS(3);
+}
+uint8_t adc_read(void)
+{
+	ADC0->SC1[0] = ADC_SC1_ADCH(12);   				// Write to SC1A to start conversion
+	while(ADC0->SC2 & ADC_SC2_ADACT_MASK); 	 		// Conversion in progress
+	while(!(ADC0->SC1[0] & ADC_SC1_COCO_MASK));		// Run until the conversion is complete
+	/*Once conversion is complete, there will be a range of 0-255 on ADC0->R[0]**/
+	/*For uses of voltage converter, this range should be displeyer as a range of 0-3.3V*/
+	/*Apply some math to converte the range*/
+	return ((ADC0->R[0]));
+}
+
 void ADC_status_and_control_1(adc_name_t adc_name, adc_channel_set_t channel_set, adc_channel_t adc_channel, adc_configuration_t* adc_configuration)
 {
 	switch(adc_name)
