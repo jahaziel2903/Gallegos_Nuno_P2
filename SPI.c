@@ -9,6 +9,40 @@
 #include "SPI.h"
 #include "LCD_nokia.h"
 
+/*It configures the SPI for transmission*/
+void SPI_init(const spi_config_t* config_struct)
+{
+	GPIO_clock_gating(config_struct->spi_gpio_port.gpio_port_name); /*Starts the clock of GPIO*/
+
+	/*Configure the pin control registers"*/
+	GPIO_pin_control_register(config_struct->spi_gpio_port.gpio_port_name,
+				config_struct->spi_gpio_port.spi_clk, &config_struct->pin_config);
+	GPIO_pin_control_register(config_struct->spi_gpio_port.gpio_port_name,
+				config_struct->spi_gpio_port.spi_cs, &config_struct->pin_config);
+	GPIO_pin_control_register(config_struct->spi_gpio_port.gpio_port_name,
+				config_struct->spi_gpio_port.spi_sin, &config_struct->pin_config);
+	GPIO_pin_control_register(config_struct->spi_gpio_port.gpio_port_name,
+				config_struct->spi_gpio_port.spi_sout, &config_struct->pin_config);
+	/*Starts clk**/
+	SPI_clk(config_struct->spi_channel);
+	/*Enable configuration chanel*/
+	SPI_enable(config_struct->spi_channel);
+	/*SPI MASTER**/
+	SPI_set_master(config_struct->spi_channel, config_struct->spi_master);
+	/*Enable the trasmi of data*/
+	SPI_fifo(config_struct->spi_channel, config_struct->spi_enable_fifo);
+	/*clk POLARITY**/
+	SPI_clock_polarity(config_struct->spi_channel, config_struct->spi_polarity);
+	/*CLK Phase**/
+	SPI_clock_phase(config_struct->spi_channel, config_struct->spi_phase);
+	/*Baud Rte**/
+	SPI_baud_rate(config_struct->spi_channel, config_struct->spi_baudrate);
+	/*Frame size selected**/
+	SPI_frame_size(config_struct->spi_channel, config_struct->spi_frame_size);
+	/*SPi select MSB**/
+	SPI_msb_first(config_struct->spi_channel, config_struct->spi_lsb_or_msb);
+}
+
 /*it enable the clock module of the SPI by modifying the MDIS bits*/
 void SPI_enable(spi_channel_t channel)
 {
@@ -171,7 +205,7 @@ void SPI_fifo(spi_channel_t channel, spi_enable_fifo_t enable_or_disable)
 			}
 			else
 			{
-				SPI2->CTAR[SPI_CTAR_0] &= ~(SPI_CTAR_CPOL_MASK); /*LOG polarity of SPI*/
+				SPI2->CTAR[SPI_CTAR_0] &= ~(SPI_CTAR_CPOL_MASK);
 			}
 			break;
 		default:
@@ -186,20 +220,17 @@ void SPI_frame_size(spi_channel_t channel, uint32_t frame_size)
 	{
 		case SPI_0:
 			/*Clear frame size*/
-			SPI0->CTAR[SPI_CTAR_0] &= ~(SPI_CTAR_FMSZ_MASK);
 			/*Define new frame size with parameter received*/
+			SPI0->CTAR[SPI_CTAR_0] &= ~(SPI_CTAR_FMSZ_MASK);
+
 			SPI0->CTAR[SPI_CTAR_0] |= frame_size;
 			break;
 		case SPI_1:
-			/*Clear frame size*/
 			SPI1->CTAR[SPI_CTAR_0] &= ~(SPI_CTAR_FMSZ_MASK);
-			/*Define new frame size with parameter received*/
 			SPI1->CTAR[SPI_CTAR_0] = frame_size;
 			break;
 		case SPI_2:
-			/*Clear frame size*/
 			SPI2->CTAR[SPI_CTAR_0] &= ~(SPI_CTAR_FMSZ_MASK);
-			/*Define new frame size with parameter received*/
 			SPI2->CTAR[SPI_CTAR_0] = frame_size;
 			break;
 		default:
@@ -212,34 +243,36 @@ void SPI_clock_phase(spi_channel_t channel, spi_phase_t cpha)
 {
 	switch(channel)
 	{
+	 /*HIGH phase to the SPI*/
+	/*LOW phase to the SPI*/
 		case SPI_0:
 			if(cpha)
 			{
-				SPI0->CTAR[SPI_CTAR_0] |= SPI_CTAR_CPHA_MASK; /*HIGH phase to the SPI*/
+				SPI0->CTAR[SPI_CTAR_0] |= SPI_CTAR_CPHA_MASK;
 			}
 			else
 			{
-				SPI0->CTAR[SPI_CTAR_0] &= ~(SPI_CTAR_CPHA_MASK); /*LOW phase to the SPI*/
+				SPI0->CTAR[SPI_CTAR_0] &= ~(SPI_CTAR_CPHA_MASK);
 			}
 			break;
 		case SPI_1:
 			if(cpha)
 			{
-				SPI1->CTAR[SPI_CTAR_0] |= SPI_CTAR_CPHA_MASK; /*HIGH phase to the SPI*/
+				SPI1->CTAR[SPI_CTAR_0] |= SPI_CTAR_CPHA_MASK;
 			}
 			else
 			{
-				SPI1->CTAR[SPI_CTAR_0] &= ~(SPI_CTAR_CPHA_MASK); /*LOW phase to the SPI*/
+				SPI1->CTAR[SPI_CTAR_0] &= ~(SPI_CTAR_CPHA_MASK);
 			}
 			break;
 		case SPI_2:
 			if(cpha)
 			{
-				SPI2->CTAR[SPI_CTAR_0] |= SPI_CTAR_CPHA_MASK; /*HIGH phase to the SPI*/
+				SPI2->CTAR[SPI_CTAR_0] |= SPI_CTAR_CPHA_MASK;
 			}
 			else
 			{
-				SPI2->CTAR[SPI_CTAR_0] &= ~(SPI_CTAR_CPHA_MASK); /*LOW phase to the SPI*/
+				SPI2->CTAR[SPI_CTAR_0] &= ~(SPI_CTAR_CPHA_MASK);
 			}
 			break;
 		default:
@@ -274,34 +307,36 @@ void SPI_msb_first(spi_channel_t channel, spi_lsb_or_msb_t msb)
 {
 	switch(channel)
 	{
+	/* LSB bits*/
+	/* MSB bits*/
 		case SPI_0:
 			if(msb)
 			{
-				SPI0->CTAR[SPI_CTAR_0] |= SPI_CTAR_LSBFE_MASK; /* LSB bits*/
+				SPI0->CTAR[SPI_CTAR_0] |= SPI_CTAR_LSBFE_MASK;
 			}
 			else
 			{
-				SPI0->CTAR[SPI_CTAR_0] &= ~(SPI_CTAR_LSBFE_MASK); /* MSB bits*/
+				SPI0->CTAR[SPI_CTAR_0] &= ~(SPI_CTAR_LSBFE_MASK);
 			}
 			break;
 		case SPI_1:
 			if(msb)
 			{
-				SPI1->CTAR[SPI_CTAR_0] |= SPI_CTAR_LSBFE_MASK; /*LSB bits*/
+				SPI1->CTAR[SPI_CTAR_0] |= SPI_CTAR_LSBFE_MASK;
 			}
 			else
 			{
-				SPI1->CTAR[SPI_CTAR_0] &= ~(SPI_CTAR_LSBFE_MASK); /*MSB bits*/
+				SPI1->CTAR[SPI_CTAR_0] &= ~(SPI_CTAR_LSBFE_MASK);
 			}
 			break;
 		case SPI_2:
 			if(msb)
 			{
-				SPI2->CTAR[SPI_CTAR_0] |= SPI_CTAR_LSBFE_MASK; /*LSB bits*/
+				SPI2->CTAR[SPI_CTAR_0] |= SPI_CTAR_LSBFE_MASK;
 			}
 			else
 			{
-				SPI2->CTAR[SPI_CTAR_0] &= ~(SPI_CTAR_LSBFE_MASK); /* MSB bits*/
+				SPI2->CTAR[SPI_CTAR_0] &= ~(SPI_CTAR_LSBFE_MASK);
 			}
 			break;
 		default:
@@ -333,14 +368,15 @@ void SPI_stop_tranference(spi_channel_t channel)
 {
 	switch(channel)
 	{
+	/*SPI Stop*/
 		case SPI_0:
-			SPI0->MCR |= SPI_MCR_HALT_MASK; /*SPI Stop*/
+			SPI0->MCR |= SPI_MCR_HALT_MASK;
 			break;
 		case SPI_1:
-			SPI1->MCR |= SPI_MCR_HALT_MASK; /*SPI Stop*/
+			SPI1->MCR |= SPI_MCR_HALT_MASK;
 			break;
 		case SPI_2:
-			SPI2->MCR |= SPI_MCR_HALT_MASK; /*SPI Stop*/
+			SPI2->MCR |= SPI_MCR_HALT_MASK;
 			break;
 		default:
 			break;
@@ -366,28 +402,8 @@ uint8_t SPI_tranference(spi_channel_t channel, uint8_t data)
 			break;
 	}
 	delay(0);
-	SPI0->SR |= SPI_SR_TCF_MASK; /*Clear the flag for transmtion */
+	/*Clear the flag for transmtion */
+	SPI0->SR |= SPI_SR_TCF_MASK;
 	return TRUE;
 }
 
-/*It configures the SPI for transmission*/
-void SPI_init(const spi_config_t* config_struct)
-{
-	GPIO_clock_gating(config_struct->spi_gpio_port.gpio_port_name); /*Starts the clock of GPIO*/
-
-	/*Configure the registers contain in paramter receive"*/
-	GPIO_pin_control_register(config_struct->spi_gpio_port.gpio_port_name, config_struct->spi_gpio_port.spi_clk, &config_struct->pin_config);
-	GPIO_pin_control_register(config_struct->spi_gpio_port.gpio_port_name, config_struct->spi_gpio_port.spi_cs, &config_struct->pin_config);
-	GPIO_pin_control_register(config_struct->spi_gpio_port.gpio_port_name, config_struct->spi_gpio_port.spi_sin, &config_struct->pin_config);
-	GPIO_pin_control_register(config_struct->spi_gpio_port.gpio_port_name, config_struct->spi_gpio_port.spi_sout, &config_struct->pin_config);
-
-	SPI_clk(config_struct->spi_channel); /*Starts clock for the SPI*/
-	SPI_enable(config_struct->spi_channel); /*Enable configurations on the SPI*/
-	SPI_set_master(config_struct->spi_channel, config_struct->spi_master); /*Configure the SPI as master*/
-	SPI_fifo(config_struct->spi_channel, config_struct->spi_enable_fifo); /*Enable the trasmition of datas FIFO*/
-	SPI_clock_polarity(config_struct->spi_channel, config_struct->spi_polarity); /*Selects the clock polarity of SPI*/
-	SPI_clock_phase(config_struct->spi_channel, config_struct->spi_phase); /*Selects the clock phase of SPI*/
-	SPI_baud_rate(config_struct->spi_channel, config_struct->spi_baudrate); /*Selects the Baud rate value */
-	SPI_frame_size(config_struct->spi_channel, config_struct->spi_frame_size); /*Selects the Frame Size value */
-	SPI_msb_first(config_struct->spi_channel, config_struct->spi_lsb_or_msb); /*Selects MSB bits when is first trasmition*/
-}
