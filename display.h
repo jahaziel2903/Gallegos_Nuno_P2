@@ -25,8 +25,6 @@
 #define y_max 8U
 #define new_y 5U
 #define ONE 1U
-//como son valores de 0 a 3.3, se hace un cast 0 - 255
-#define NEW_DUTY (0x5u)
 
 #define clk 21000000
 #define delay_1s 1U
