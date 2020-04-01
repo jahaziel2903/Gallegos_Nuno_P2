@@ -97,7 +97,7 @@ void adc_set_pwm(uint16_t ADC_value)
 	{
 		FlexTimer_update_channel_value(Channel_RED, HIGH);
 		//como esta mas lejano al verde, se le aplica el siguiente valro al pwm
-		FlexTimer_update_channel_value(Channel_GREEN, ph_level);
+		FlexTimer_update_channel_value(Channel_GREEN, ph_level* NEW_DUTY);
 		FlexTimer_update_channel_value(Channel_BLUE, PW_0);
 	}
 	else if( RED_YELLOW <= ADC_value && YELLOW_GREEN > ADC_value)
